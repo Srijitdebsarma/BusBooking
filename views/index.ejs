@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Bus Booking</h1>
+    <form action="/bookaBus" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required><br><br>
+        <label for="bus">Select a bus:</label>
+        <select id="bus" name="bus">
+            <option value="Bus A">Bus A</option>
+            <option value="Bus B">Bus B</option>
+            <option value="Bus C">Bus C</option>
+        </select><br><br>
+        <button type="submit">Book Now</button>
+    </form>
+<br/><br/><br/>
+
+    <form action="/bookaBus/byBus" method="GET">
+        <label for="bus">Select a Bus:</label>
+        <select name="bus" id="bus">
+            <option value="Bus A">Bus A</option>
+            <option value="Bus B">Bus B</option>
+            <!-- Add more options as needed -->
+        </select>
+        <button type="submit">Search</button>
+    </form>
+    
+    <br/><br/><br/>
+    
+    <h2>All Bookings</h2>
+    <table border="black 1px">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Bus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let booking of allBookings){ %>
+                <tr>
+                    <td><%= booking.name %></td>
+                    <td><%= booking.email %></td>
+                    <td><%= booking.phone %></td>
+                    <td><%= booking.bus %></td>
+                    <td>
+                        <!-- Update Button -->
+                        <button><a href="/update/<%= booking._id %>">Update</a></button>
+                        
+                        <!-- Delete Button -->
+                        <form action="/delete/<%= booking._id %>" method="POST">
+                            <button type="submit">Delete</button>
+                        </form>                        
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>    
+</body>
+</html>
