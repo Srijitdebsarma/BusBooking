@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser'); //for post req
 const path = require('path');
 const axios = require('axios');
 
 const ejsMate = require('ejs-mate');
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true })); //for post req
 app.use(bodyParser.json());
 
 //set up view engine
@@ -24,11 +24,11 @@ app.listen(8080, ()=>{   //running our app on 8080
 app.get("/bookaBus", async (req, res) => {  
     try {
         // Sending GET request to the CRUD endpoint
-        const response = await axios.get('https://crudcrud.com/api/fdc0e3d738dc43a5925a5622aa0567c8/bookings');
+        const response = await axios.get('https://crudcrud.com/api/c1c4ad62b98d4607a5786cb520dc4e85/bookings');
 
         // Extracting data from the response
         const allBookings = response.data;
-        console.log(allBookings);
+        //console.log(allBookings);
         res.render("index.ejs", { allBookings }); 
     } catch (error) {
         console.error('Error fetching bookings:', error);
@@ -50,13 +50,13 @@ app.post("/bookaBus", async (req, res) => {
         };
 
         // Send POST request to CRUD API endpoint for bookings
-        const response = await axios.post('https://crudcrud.com/api/fdc0e3d738dc43a5925a5622aa0567c8/bookings', payload);
+        const response = await axios.post('https://crudcrud.com/api/c1c4ad62b98d4607a5786cb520dc4e85/bookings', payload);
 
         // Handle response as needed
-        console.log('New booking created:', response.data);
+         console.log('New booking created');
 
         // Redirect or render a response
-        res.redirect("/bookaBus"); // Assuming you want to redirect to a confirmation page
+        res.redirect("/bookaBus"); 
     } catch (error) {
         console.error('Error creating new booking:', error);
         res.status(500).send('Internal Server Error');
@@ -65,9 +65,11 @@ app.post("/bookaBus", async (req, res) => {
 
 
 
-app.get("/update/:id",  (req, res) => {
+app.get("/update/:id", async (req, res) => {
         const {id} = req.params;
-        res.render("update.ejs",{id});
+        const response = await axios.get(`https://crudcrud.com/api/c1c4ad62b98d4607a5786cb520dc4e85/bookings/${id}`);
+        let data=response.data;
+        res.render("update.ejs",{data});
 });
 app.post("/update/:id", async (req, res) => {
     try {
@@ -83,7 +85,7 @@ app.post("/update/:id", async (req, res) => {
         };
 
         // Send a PUT request to update the booking
-        await axios.put(`https://crudcrud.com/api/fdc0e3d738dc43a5925a5622aa0567c8/bookings/${id}`, payload);
+        await axios.put(`https://crudcrud.com/api/c1c4ad62b98d4607a5786cb520dc4e85/bookings/${id}`, payload);
 
         // Redirect to a confirmation page or wherever needed
         res.redirect("/bookaBus");
@@ -98,7 +100,7 @@ app.post("/delete/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-        const response = await axios.delete(`https://crudcrud.com/api/fdc0e3d738dc43a5925a5622aa0567c8/bookings/${id}`);
+        const response = await axios.delete(`https://crudcrud.com/api/c1c4ad62b98d4607a5786cb520dc4e85/bookings/${id}`);
 
         console.log('Booking deleted:', response.data);
 
@@ -115,7 +117,7 @@ app.get("/bookaBus/byBus", async (req, res) => {
         const selectedBus = req.query.bus;
 
         // Sending GET request to the CRUD endpoint
-        const response = await axios.get('https://crudcrud.com/api/fdc0e3d738dc43a5925a5622aa0567c8/bookings');
+        const response = await axios.get('https://crudcrud.com/api/c1c4ad62b98d4607a5786cb520dc4e85/bookings');
 
         // Extracting data from the response
         const allBookings = response.data;
